@@ -138,7 +138,7 @@ services:
     command: ["/app/docker/docker-bootstrap.sh", "worker"]
     env_file: docker/.env
     environment:
-      DATABASE_HOST: localhost
+      DATABASE_HOST: host.docker.internal
       DATABASE_DB: test
       REDIS_CELERY_DB: 2
       REDIS_RESULTS_DB: 3
