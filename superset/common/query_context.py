@@ -32,7 +32,7 @@ from superset.charts.dao import ChartDAO
 from superset.common.chart_data import ChartDataResultFormat, ChartDataResultType
 from superset.common.db_query_status import QueryStatus
 from superset.common.query_actions import get_query_results
-from superset.common.query_object import QueryObject
+from superset.common.query_object import QueryObject, QueryObjectFactory
 from superset.common.utils import QueryCacheManager
 from superset.connectors.base.models import BaseDatasource
 from superset.connectors.connector_registry import ConnectorRegistry
@@ -80,10 +80,10 @@ class QueryContext:
 
     datasource: BaseDatasource
     queries: List[QueryObject]
-    force: bool
-    custom_cache_timeout: Optional[int]
     result_type: ChartDataResultType
     result_format: ChartDataResultFormat
+    force: bool
+    custom_cache_timeout: Optional[int]
 
     # TODO: Type datasource and query_object dictionary with TypedDict when it becomes
     #  a vanilla python type https://github.com/python/mypy/issues/5288
@@ -92,19 +92,23 @@ class QueryContext:
         self,
         datasource: DatasourceDict,
         queries: List[Dict[str, Any]],
-        force: bool = False,
-        custom_cache_timeout: Optional[int] = None,
         result_type: Optional[ChartDataResultType] = None,
         result_format: Optional[ChartDataResultFormat] = None,
+        force: bool = False,
+        custom_cache_timeout: Optional[int] = None,
     ) -> None:
         self.datasource = ConnectorRegistry.get_datasource(
             str(datasource["type"]), int(datasource["id"]), db.session
         )
-        self.force = force
-        self.custom_cache_timeout = custom_cache_timeout
         self.result_type = result_type or ChartDataResultType.FULL
         self.result_format = result_format or ChartDataResultFormat.JSON
-        self.queries = [QueryObject(self, **query_obj) for query_obj in queries]
+        query_object_factory = QueryObjectFactory()
+        self.queries = [
+            query_object_factory.create(self.result_type, **query_obj)
+            for query_obj in queries
+        ]
+        self.force = force
+        self.custom_cache_timeout = custom_cache_timeout
         self.cache_values = {
             "datasource": datasource,
             "queries": queries,
