@@ -94,7 +94,7 @@ const titleContainer = css`
   .logo-horiz {
     margin-top: 20px;
     margin-bottom: 20px;
-    width: 600px;
+    width: 800px;
     max-width: 100%;
     ${[mq[3]]} {
       width: 550px;

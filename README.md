@@ -32,7 +32,7 @@ under the License.
 <img
   src="https://github.com/apache/superset/raw/master/superset-frontend/src/assets/branding/superset-logo-horiz-apache.png"
   alt="Superset"
-  width="500"
+  width="740"
 />
 
 A modern, enterprise-ready business intelligence web application.
