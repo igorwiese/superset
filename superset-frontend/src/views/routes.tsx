@@ -104,7 +104,7 @@ type Routes = {
 
 export const routes: Routes = [
   {
-    path: '/dtanalytics/welcome/',
+    path: '/superset/welcome/',
     Component: Welcome,
   },
   {
@@ -112,7 +112,7 @@ export const routes: Routes = [
     Component: DashboardList,
   },
   {
-    path: '/dtanalytics/dashboard/:idOrSlug/',
+    path: '/superset/dashboard/:idOrSlug/',
     Component: DashboardPage,
   },
   {
